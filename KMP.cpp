@@ -1,22 +1,25 @@
-vector<int> buildLPS(const string &pat) {
-    int m = pat.size();
-    vector<int> lps(m, 0);
-    for (int i = 1, len = 0; i < m; ) {
-        if (pat[i] == pat[len]) {
-            lps[i++] = ++len;
-        } else if (len) {
-            len = lps[len - 1];
-        } else {
-            lps[i++] = 0;
-        }
-    }
-    return lps;
+vector<int> buildLPS(const string &s) {
+	int n = s.size();
+	vector<int> LPS(n, 0);
+	for (int i = 1, j = 0; i < n;) {
+		if (s[i] == s[j]) LPS[i++] = ++j;
+		else if (j) j = LPS[j - 1];
+		else LPS[i++] = 0;
+	}
+	return LPS;
 }
- for (int i = 0, j = 0; i < N; ++i) {
-    while (j > 0 && str[i] != pattern[j]) j = lps[j - 1];
-    if (str[i] == pattern[j]) ++j;
-    if (j == o) {
-        // do specific process here
-        j = lps[j - 1];
-    }
+vector<int> stringMatch(string text, string pattern) {
+	int n = text.size();
+	vector<int> ans;
+	vector<int> LPS = buildLPS(pattern);
+	int m = pattern.size();
+	for (int i = 0, j = 0; i < n; i++) {
+		while (j > 0 && text[i] != pattern[j]) j = LPS[j - 1];
+		if (text[i] == pattern[j]) j++;
+		if (j == m) {
+			ans.push_back(i - m + 2);
+			j = LPS[j - 1];
+		}
+	}
+	return ans;
 }
